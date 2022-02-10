@@ -170,6 +170,18 @@ export default Model.extend(Validations, {
   generateSigningKey: attr('boolean', {
     defaultValue: true,
   }),
+  keyType: attr('string', {
+    label: 'Key type',
+    possibleValues: [
+      'ssh-rsa',
+      'ecdsa-sha2-nistp256',
+      'ecdsa-sha2-nistp384',
+      'ecdsa-sha2-nistp521',
+      'ssh-ed25519',
+    ],
+    defaultValue: 'ssh-rsa',
+  }),
+  keyBits: attr('number'),
 
   saveCA(options) {
     if (this.type !== 'ssh') {
@@ -179,6 +191,8 @@ export default Model.extend(Validations, {
       this.setProperties({
         privateKey: null,
         publicKey: null,
+        keyType: null,
+        keyBits: null,
         generateSigningKey: false,
       });
     }
@@ -186,7 +200,7 @@ export default Model.extend(Validations, {
       adapterOptions: {
         options: options,
         apiPath: 'config/ca',
-        attrsToSend: ['privateKey', 'publicKey', 'generateSigningKey'],
+        attrsToSend: ['privateKey', 'publicKey', 'generateSigningKey', 'keyType', 'keyBits'],
       },
     });
   },
